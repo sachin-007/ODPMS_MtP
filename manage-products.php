@@ -21,8 +21,8 @@ if (strlen($_SESSION['aid']==0)) {
     <link href="dist/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    
-   
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 <!-- Top Navbar -->
@@ -69,32 +69,32 @@ include_once('includes/sidebar.php');
                                                     <th>Pricing</th>
                                                     <th>Posting Date</th>
                                                     <th>Action</th>
-                                                    
+
                                                 </tr>
                                             </thead>
                                             <tbody>
 <?php
-$rno=mt_rand(10000,99999);  
-$query=mysqli_query($con,"select * from tblproducts");
+$rno=mt_rand(10000,99999);
+$query=pg_query("select * from tblproducts");
 $cnt=1;
-while($row=mysqli_fetch_array($query))
-{    
-?>                                                
+while($row=pg_fetch_array($query))
+{
+?>
 <tr>
 <td><?php echo $cnt;?></td>
-<td><?php echo $row['CategoryName'];?></td>
-<td><?php echo $row['CompanyName'];?></td>
-<td><?php echo $row['ProductName'];?></td>
-<td><?php echo $row['ProductPrice'];?></td>
-<td><?php echo $row['PostingDate'];?></td>
+<td><?php echo $row['categoryname'];?></td>
+<td><?php echo $row['companyname'];?></td>
+<td><?php echo $row['productname'];?></td>
+<td><?php echo $row['productprice'];?></td>
+<td><?php echo $row['postingdate'];?></td>
 <td>
 <a href="edit-product.php?pid=<?php echo base64_encode($row['id'].$rno);?>" class="mr-25" data-toggle="tooltip" data-original-title="Edit"> <i class="icon-pencil"></i></a>
 </td>
 </tr>
-<?php 
+<?php
 $cnt++;
 } ?>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>

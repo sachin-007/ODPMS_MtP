@@ -5,11 +5,11 @@ include('includes/config.php');
 if (strlen($_SESSION['aid']==0)) {
   header('location:logout.php');
   } else{
-// Code for deletion       
-if(isset($_GET['del'])){    
+// Code for deletion
+if(isset($_GET['del'])){
 $cmpid=substr(base64_decode($_GET['del']),0,-5);
-$query=mysqli_query($con,"delete from tblcompany where id='$cmpid'");
-echo "<script>alert('Company record deleted.');</script>";   
+$query=pg_query("delete from tblcompany where id='$cmpid'");
+echo "<script>alert('Company record deleted.');</script>";
 echo "<script>window.location.href='manage-companies.php'</script>";
 }
 
@@ -28,8 +28,8 @@ echo "<script>window.location.href='manage-companies.php'</script>";
     <link href="dist/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    
-   
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 <!-- Top Navbar -->
@@ -73,30 +73,30 @@ include_once('includes/sidebar.php');
                                                     <th>Company Name</th>
                                                     <th>Posting Date</th>
                                                     <th>Action</th>
-                                                    
+
                                                 </tr>
                                             </thead>
                                             <tbody>
 <?php
-$rno=mt_rand(10000,99999);  
-$query=mysqli_query($con,"select * from tblcompany");
+$rno=mt_rand(10000,99999);
+$query=pg_query("select * from tblcompany");
 $cnt=1;
-while($row=mysqli_fetch_array($query))
-{    
-?>                                                
+while($row=pg_fetch_array($query))
+{
+?>
 <tr>
 <td><?php echo $cnt;?></td>
-<td><?php echo $row['CompanyName'];?></td>
-<td><?php echo $row['PostingDate'];?></td>
+<td><?php echo $row['companyname'];?></td>
+<td><?php echo $row['postingdate'];?></td>
 <td>
 <a href="edit-company.php?compid=<?php echo base64_encode($row['id'].$rno);?>" class="mr-25" data-toggle="tooltip" data-original-title="Edit"> <i class="icon-pencil"></i></a>
 <a href="manage-companies.php?del=<?php echo base64_encode($row['id'].$rno);?>" data-toggle="tooltip" data-original-title="Delete" onclick="return confirm('Do you really want to delete?');"> <i class="icon-trash txt-danger"></i> </a>
 </td>
 </tr>
-<?php 
+<?php
 $cnt++;
 } ?>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>

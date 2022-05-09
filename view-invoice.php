@@ -5,11 +5,11 @@ include('includes/config.php');
 if (strlen($_SESSION['aid']==0)) {
   header('location:logout.php');
   } else{
-// Code for deletion   
-if(isset($_GET['del'])){    
+// Code for deletion
+if(isset($_GET['del'])){
 $cmpid=substr(base64_decode($_GET['del']),0,-5);
-$query=mysqli_query($con,"delete from tblcategory where id='$cmpid'");
-echo "<script>alert('Category record deleted.');</script>";   
+$query=pg_query("delete from tblcategory where id='$cmpid'");
+echo "<script>alert('Category record deleted.');</script>";
 echo "<script>window.location.href='manage-categories.php'</script>";
 }
 ?>
@@ -27,8 +27,8 @@ echo "<script>window.location.href='manage-categories.php'</script>";
     <link href="dist/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    
-   
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 <!-- Top Navbar -->
@@ -67,34 +67,35 @@ include_once('includes/sidebar.php');
                             <div class="invoice-from-wrap">
                                 <div class="row">
                                     <div class="col-md-7 mb-20">
-<h3 class="mb-35 font-weight-600">     DFSMS </h3>
-<h6 class="mb-5">Dairy Farm Shop Management System</h6>
+<h3 class="mb-35 font-weight-600">     ODPMS </h3>
+<h6 class="mb-5">Online Dairy Product Management System</h6>
 
 </div>
 
-<?php 
+<?php
 //Consumer Details
 $inid=substr(base64_decode($_GET['invid']),0,-5);
-$query=mysqli_query($con,"select distinct InvoiceNumber,CustomerName,CustomerContactNo,PaymentMode,InvoiceGenDate  from tblorders  where InvoiceNumber='$inid'");
+$query=pg_query("select distinct invoicenumber,customername,customercontactno,paymentmode,invoicegendate  from tblorders  where invoicenumber='$inid'");
+// $query=pg_query("select distinct invoicenumber,customername,customercontactno,paymentmode,invoicegendate  from tblorders  where invoicenumber=493833100");
 $cnt=1;
-while($row=mysqli_fetch_array($query))
-{    
+while($row=pg_fetch_array($query))
+{
 ?>
 <div class="col-md-5 mb-20">
 <h4 class="mb-35 font-weight-600">Invoice / Receipt</h4>
-<span class="d-block">Date:<span class="pl-10 text-dark"><?php echo $row['InvoiceGenDate'];?></span></span>
-<span class="d-block">Invoice / Receipt #<span class="pl-10 text-dark"><?php echo $row['InvoiceNumber'];?></span></span>
-<span class="d-block">Customer #<span class="pl-10 text-dark"><?php echo $row['CustomerName'];?></span></span>
-<span class="d-block">Customer Mobile No #<span class="pl-10 text-dark"><?php echo $row['CustomerContactNo'];?></span></span>
-<span class="d-block">Payment Mode #<span class="pl-10 text-dark"><?php echo $row['PaymentMode'];?></span></span>
+<span class="d-block">Date:<span class="pl-10 text-dark"><?php echo $row['invoicegendate'];?></span></span>
+<span class="d-block">Invoice / Receipt #<span class="pl-10 text-dark"><?php echo $row['invoicenumber'];?></span></span>
+<span class="d-block">Customer #<span class="pl-10 text-dark"><?php echo $row['customername'];?></span></span>
+<span class="d-block">Customer Mobile No #<span class="pl-10 text-dark"><?php echo $row['customercontactno'];?></span></span>
+<span class="d-block">Payment Mode #<span class="pl-10 text-dark"><?php echo $row['paymentmode'];?></span></span>
 </div>
 </div>
 </div>
 <?php } ?>
 <hr class="mt-0">
-                        
-                          
-                       
+
+
+
 <div class="row">
 <div class="col-sm">
 <div class="table-wrap">
@@ -105,39 +106,40 @@ while($row=mysqli_fetch_array($query))
 <th >Product Name</th>
 <th>Category</th>
 <th>Company</th>
-<th width="5%">Quantity</th>
+<th width="5%">quantity</th>
 <th width="10%">Unit Price</th>
 <th width="10%">Price</th>
 
 </tr>
                                             </thead>
                                             <tbody>
-<?php 
+<?php
 //Product Details
-$query=mysqli_query($con,"select tblproducts.CategoryName,tblproducts.ProductName,tblproducts.CompanyName,tblproducts.ProductPrice,tblorders.Quantity  from tblorders join tblproducts on tblproducts.id=tblorders.ProductId where tblorders.InvoiceNumber='$inid'");
+$query=pg_query("select tblproducts.categoryname,tblproducts.productname,tblproducts.companyname,tblproducts.productprice,tblorders.quantity  from tblorders join tblproducts on tblproducts.id=tblorders.productid where tblorders.invoicenumber='$inid'");
+// $query=pg_query("select tblproducts.categoryname,tblproducts.productname,tblproducts.companyname,tblproducts.productprice,tblorders.quantity  from tblorders join tblproducts on tblproducts.id=tblorders.productid where tblorders.invoicenumber=493833100");
 $cnt=1;
-while($row=mysqli_fetch_array($query))
-{    
-?>                                                
+while($row=pg_fetch_array($query))
+{
+?>
 <tr>
 <td><?php echo $cnt;?></td>
-<td><?php echo $row['ProductName'];?></td>
-<td><?php echo $row['CategoryName'];?></td>
-<td><?php echo $row['CompanyName'];?></td>
-<td><?php echo $qty=$row['Quantity'];?></td>
-<td><?php echo $ppu=$row['ProductPrice'];?></td>
+<td><?php echo $row['productname'];?></td>
+<td><?php echo $row['categoryname'];?></td>
+<td><?php echo $row['companyname'];?></td>
+<td><?php echo $qty=$row['quantity'];?></td>
+<td><?php echo $ppu=$row['productprice'];?></td>
 <td><?php echo $subtotal=number_format($ppu*$qty,2);?></td>
 </tr>
 
 <?php
-$grandtotal+=$subtotal; 
+$grandtotal+=$subtotal;
 $cnt++;
 } ?>
   <tr>
-<th colspan="6" style="text-align:center; font-size:20px;">Total</th> 
-<th style="text-align:left; font-size:20px;"><?php echo number_format($grandtotal,2);?></th>   
+<th colspan="6" style="text-align:center; font-size:20px;">Total</th>
+<th style="text-align:left; font-size:20px;"><?php echo number_format($grandtotal,2);?></th>
 
-</tr>                                              
+</tr>
                                             </tbody>
                                         </table>
                                     </div>

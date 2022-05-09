@@ -9,14 +9,14 @@ if (strlen($_SESSION['aid']==0)) {
 if(isset($_POST['submit']))
 {
 //Getting Post Values
-$cname=$_POST['companyname'];   
-$query=mysqli_query($con,"insert into tblcompany(CompanyName) values('$cname')"); 
+$cname=$_POST['companyname'];
+$query=pg_query("insert into tblcompany(companyname) values('$cname')");
 if($query){
-echo "<script>alert('Company added successfully.');</script>";   
+echo "<script>alert('Company added successfully.');</script>";
 echo "<script>window.location.href='add-company.php'</script>";
 } else{
-echo "<script>alert('Something went wrong. Please try again.');</script>";   
-echo "<script>window.location.href='add-company.php'</script>";    
+echo "<script>alert('Something went wrong. Please try again.');</script>";
+echo "<script>window.location.href='add-company.php'</script>";
 }
 }
 
@@ -34,8 +34,8 @@ echo "<script>window.location.href='add-company.php'</script>";
 </head>
 
 <body>
-    
-    
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 
@@ -43,7 +43,7 @@ echo "<script>window.location.href='add-company.php'</script>";
 <?php include_once('includes/navbar.php');
 include_once('includes/sidebar.php');
 ?>
-       
+
 
 
         <div id="hk_nav_backdrop" class="hk-nav-backdrop"></div>
@@ -78,7 +78,7 @@ include_once('includes/sidebar.php');
 <div class="row">
 <div class="col-sm">
 <form class="needs-validation" method="post" novalidate>
-                                       
+
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Company Name</label>
@@ -87,13 +87,13 @@ include_once('includes/sidebar.php');
 </div>
 </div>
 
-                                 
+
 <button class="btn btn-primary" type="submit" name="submit">Submit</button>
 </form>
 </div>
 </div>
 </section>
-                     
+
 </div>
 </div>
 </div>

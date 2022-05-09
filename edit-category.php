@@ -8,12 +8,14 @@ if (strlen($_SESSION['aid']==0)) {
 // Add Category Code
 if(isset($_POST['update']))
 {
-$cid=substr(base64_decode($_GET['catid']),0,-5);    
+$cid=substr(base64_decode($_GET['catid']),0,-5);
 //Getting Post Values
-$catname=$_POST['category']; 
-$catcode=$_POST['categorycode'];   
-$query=mysqli_query($con,"update tblcategory set CategoryName='$catname',CategoryCode='$catcode' where id='$cid'"); 
-echo "<script>alert('Category updated successfully.');</script>";   
+$catname=$_POST['category'];
+$catcode=$_POST['categorycode'];
+
+$query=pg_query("update tblcategory set CategoryName='$catname',CategoryCode='$catcode' where id='$cid'");
+
+echo "<script>alert('Category updated successfully.');</script>";
 echo "<script>window.location.href='manage-categories.php'</script>";
 }
 ?>
@@ -30,8 +32,8 @@ echo "<script>window.location.href='manage-categories.php'</script>";
 </head>
 
 <body>
-    
-    
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 
@@ -70,14 +72,17 @@ include_once('includes/sidebar.php');
 <form class="needs-validation" method="post" novalidate>
 <?php
 $cid=substr(base64_decode($_GET['catid']),0,-5);
-$ret=mysqli_query($con,"select * from tblcategory where ID='$cid'");
+
+
+$ret=pg_query("select * from tblcategory where ID='$cid'");
+
 $cnt=1;
-while ($row=mysqli_fetch_array($ret)) {
-?>                                       
+while ($row=pg_fetch_array($ret)) {
+?>
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Category</label>
-<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['CategoryName'];?>" name="category" required>
+<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['categoryname'];?>" name="category" required>
 <div class="invalid-feedback">Please provide a valid category name.</div>
 </div>
 </div>
@@ -85,17 +90,17 @@ while ($row=mysqli_fetch_array($ret)) {
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Category Code</label>
-<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['CategoryCode'];?>" name="categorycode" required>
+<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['categorycode'];?>" name="categorycode" required>
 <div class="invalid-feedback">Please provide a valid category code.</div>
 </div>
 </div>
-<?php } ?>                                 
+<?php } ?>
 <button class="btn btn-primary" type="submit" name="update">Update</button>
 </form>
 </div>
 </div>
 </section>
-                     
+
 </div>
 </div>
 </div>

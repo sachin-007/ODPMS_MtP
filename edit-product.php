@@ -8,14 +8,14 @@ if (strlen($_SESSION['aid']==0)) {
 // Edit product Code
 if(isset($_POST['update']))
 {
-$pid=substr(base64_decode($_GET['pid']),0,-5);    
+$pid=substr(base64_decode($_GET['pid']),0,-5);
 //Getting Post Values
-$catname=$_POST['category']; 
-$company=$_POST['company'];   
+$catname=$_POST['category'];
+$company=$_POST['company'];
 $pname=$_POST['productname'];
 $pprice=$_POST['productprice'];
-$query=mysqli_query($con,"update tblproducts set CategoryName='$catname',CompanyName='$company',ProductName='$pname',ProductPrice='$pprice' where id='$pid'"); 
-echo "<script>alert('Product updated successfully.');</script>";   
+$query=pg_query("update tblproducts set categoryname='$catname',companyname='$company',productname='$pname',productprice='$pprice' where id='$pid'");
+echo "<script>alert('Product updated successfully.');</script>";
 echo "<script>window.location.href='manage-products.php'</script>";
 
 }
@@ -34,8 +34,8 @@ echo "<script>window.location.href='manage-products.php'</script>";
 </head>
 
 <body>
-    
-    
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 
@@ -43,7 +43,7 @@ echo "<script>window.location.href='manage-products.php'</script>";
 <?php include_once('includes/navbar.php');
 include_once('includes/sidebar.php');
 ?>
-       
+
 
 
         <div id="hk_nav_backdrop" class="hk-nav-backdrop"></div>
@@ -77,20 +77,20 @@ include_once('includes/sidebar.php');
 <form class="needs-validation" method="post" novalidate>
 <?php
 $pid=substr(base64_decode($_GET['pid']),0,-5);
-$query=mysqli_query($con,"select * from tblproducts where id='$pid'");
-while($result=mysqli_fetch_array($query))
-{    
-?>                                       
+$query=pg_query("select * from tblproducts where id='$pid'");
+while($result=pg_fetch_array($query))
+{
+?>
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Category</label>
  <select class="form-control custom-select" name="category" required>
-<option value="<?php echo $result['CategoryName'];?>"><?php echo $catname=$result['CategoryName'];?></option>
+<option value="<?php echo $result['categoryname'];?>"><?php echo $catname=$result['categoryname'];?></option>
 <?php
-$ret=mysqli_query($con,"select CategoryName from tblcategory");
-while($row=mysqli_fetch_array($ret))
+$ret=pg_query("select categoryname from tblcategory");
+while($row=pg_fetch_array($ret))
 {?>
-<option value="<?php echo $row['CategoryName'];?>"><?php echo $row['CategoryName'];?></option>
+<option value="<?php echo $row['categoryname'];?>"><?php echo $row['categoryname'];?></option>
 <?php } ?>
 </select>
 <div class="invalid-feedback">Please select a category.</div>
@@ -101,12 +101,12 @@ while($row=mysqli_fetch_array($ret))
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Company</label>
  <select class="form-control custom-select" name="company" required>
-<option value="<?php echo $result['CompanyName'];?>"><?php echo $result['CompanyName'];?></option>
+<option value="<?php echo $result['companyname'];?>"><?php echo $result['companyname'];?></option>
 <?php
-$ret=mysqli_query($con,"select CompanyName from tblcompany");
-while($rw=mysqli_fetch_array($ret))
+$ret=pg_query("select companyname from tblcompany");
+while($rw=pg_fetch_array($ret))
 {?>
-<option value="<?php echo $rw['CompanyName'];?>"><?php echo $rw['CompanyName'];?></option>
+<option value="<?php echo $rw['companyname'];?>"><?php echo $rw['companyname'];?></option>
 <?php } ?>
 </select>
 <div class="invalid-feedback">Please select a company.</div>
@@ -115,15 +115,15 @@ while($rw=mysqli_fetch_array($ret))
  <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Product Name</label>
-<input type="text" class="form-control" id="validationCustom03" value="<?php echo $result['ProductName'];?>" name="productname" required>
+<input type="text" class="form-control" id="validationCustom03" value="<?php echo $result['productname'];?>" name="productname" required>
 <div class="invalid-feedback">Please provide a valid product name.</div>
 </div>
-</div>   
+</div>
 
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Product Price</label>
-<input type="text" class="form-control" id="validationCustom03" value="<?php echo $result['ProductPrice'];?>" name="productprice" required>
+<input type="text" class="form-control" id="validationCustom03" value="<?php echo $result['productprice'];?>" name="productprice" required>
 <div class="invalid-feedback">Please provide a valid product price.</div>
 </div>
 </div>
@@ -133,7 +133,7 @@ while($rw=mysqli_fetch_array($ret))
 </div>
 </div>
 </section>
-                     
+
 </div>
 </div>
 </div>

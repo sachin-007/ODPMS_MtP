@@ -11,14 +11,14 @@ if(isset($_POST['submit']))
 $adminid=$_SESSION['aid'];
 $cpassword=md5($_POST['currentpassword']);
 $newpassword=md5($_POST['newpassword']);
-$query=mysqli_query($con,"select ID from tbladmin where ID='$adminid' and   Password='$cpassword'");
-$row=mysqli_fetch_array($query);
+$query=pg_query("select ID from tbladmin where ID='$adminid' and   Password='$cpassword'");
+$row=pg_fetch_array($query);
 if($row>0){
-$ret=mysqli_query($con,"update tbladmin set Password='$newpassword' where ID='$adminid'");
-echo "<script>alert('Password changed successfully.');</script>";   
+$ret=pg_query("update tbladmin set Password='$newpassword' where ID='$adminid'");
+echo "<script>alert('Password changed successfully.');</script>";
 echo "<script>window.location.href='change-password.php'</script>";
 } else {
-echo "<script>alert('Your current password is wrong');</script>";   
+echo "<script>alert('Your current password is wrong');</script>";
 echo "<script>window.location.href='change-password.php'</script>";
 }
 
@@ -47,8 +47,8 @@ document.changepassword.confirmpassword.focus();
 return false;
 }
 return true;
-}   
-</script>    
+}
+</script>
 </head>
 <body>
 	<!-- HK Wrapper -->
@@ -58,7 +58,7 @@ return true;
 <?php include_once('includes/navbar.php');
 include_once('includes/sidebar.php');
 ?>
-       
+
 
 
         <div id="hk_nav_backdrop" class="hk-nav-backdrop"></div>
@@ -93,7 +93,7 @@ include_once('includes/sidebar.php');
 <div class="row">
 <div class="col-sm">
 <form class="needs-validation" method="post" name="changepassword" novalidate onsubmit="return checkpass();">
-                                       
+
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Current Password</label>
@@ -117,13 +117,13 @@ include_once('includes/sidebar.php');
 <div class="invalid-feedback">Please provide  confirm password.</div>
 </div>
 </div>
-                                 
+
 <button class="btn btn-primary" type="submit" name="submit">Change</button>
 </form>
 </div>
 </div>
 </section>
-                     
+
 </div>
 </div>
 </div>

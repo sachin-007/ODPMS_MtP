@@ -20,8 +20,8 @@ if (strlen($_SESSION['aid']==0)) {
 </head>
 
 <body>
-    
-	
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 
@@ -33,16 +33,15 @@ include_once('includes/sidebar.php');
         <!-- Main Content -->
         <div class="hk-pg-wrapper">
 			<!-- Container -->
-            <div class="container-fluid"
-             >
+            <div class="container-fluid mt-xl-50 mt-sm-30 mt-15">
                 <!-- Row -->
                 <div class="row">
                     <div class="col-xl-12">
                         <div class="hk-row">
 
 <?php
-$query=mysqli_query($con,"select id from tblcategory");
-$listedcat=mysqli_num_rows($query);
+$query=pg_query("select id from tblcategory");
+$listedcat=pg_num_rows($query);
 ?>
 
 <div class="col-lg-3 col-md-6">
@@ -62,11 +61,11 @@ $listedcat=mysqli_num_rows($query);
 </div>
 </div>
 </div>
-							
+
 
 <?php
-$ret=mysqli_query($con,"select id from tblcompany");
-$listedcomp=mysqli_num_rows($ret);
+$ret=pg_query("select id from tblcompany");
+$listedcomp=pg_num_rows($ret);
 ?>
 <div class="col-lg-3 col-md-6">
 <div class="card card-sm">
@@ -86,10 +85,10 @@ $listedcomp=mysqli_num_rows($ret);
 </div>
 </div>
 </div>
-							
+
 <?php
-$sql=mysqli_query($con,"select id from tblproducts");
-$listedproduct=mysqli_num_rows($sql);
+$sql=pg_query("select id from tblproducts");
+$listedproduct=pg_num_rows($sql);
 ?>
 <div class="col-lg-3 col-md-6">
 <div class="card card-sm">
@@ -109,8 +108,8 @@ $listedproduct=mysqli_num_rows($sql);
 </div>
 </div>
 <?php
-$query=mysqli_query($con,"select sum(tblorders.Quantity*tblproducts.ProductPrice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.ProductId ");
-$row=mysqli_fetch_array($query);
+$query=pg_query("select sum(tblorders.Quantity*tblproducts.ProductPrice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.ProductId ");
+$row=pg_fetch_array($query);
 ?>
 <div class="col-lg-3 col-md-6">
 <div class="card card-sm">
@@ -128,11 +127,11 @@ $row=mysqli_fetch_array($query);
 </div>
 </div>
 </div>
-</div>	
+</div>
 
 <?php
-$qury=mysqli_query($con,"select sum(tblorders.Quantity*tblproducts.ProductPrice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.ProductId where date(tblorders.InvoiceGenDate)>=(DATE(NOW()) - INTERVAL 7 DAY)");
-$row=mysqli_fetch_array($qury);
+$qury=pg_query("select sum(tblorders.Quantity*tblproducts.ProductPrice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.ProductId where date(tblorders.InvoiceGenDate)>=(DATE(NOW()) - INTERVAL 7 DAY)");
+$row=pg_fetch_array($qury);
 ?>
 <div class="col-lg-3 col-md-6">
 <div class="card card-sm">
@@ -153,8 +152,8 @@ $row=mysqli_fetch_array($qury);
 </div>
 
 <?php
-$qurys=mysqli_query($con,"select sum(tblorders.Quantity*tblproducts.ProductPrice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.ProductId where date(tblorders.InvoiceGenDate)=CURDATE()-1");
-$rw=mysqli_fetch_array($qurys);
+$qurys=pg_query("select sum(tblorders.Quantity*tblproducts.ProductPrice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.ProductId where date(tblorders.InvoiceGenDate)=CURDATE()-1");
+$rw=pg_fetch_array($qurys);
 ?>
 <div class="col-lg-3 col-md-6">
 <div class="card card-sm">
@@ -175,8 +174,8 @@ $rw=mysqli_fetch_array($qurys);
 </div>
 
 <?php
-$quryss=mysqli_query($con,"select sum(tblorders.Quantity*tblproducts.ProductPrice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.ProductId where date(tblorders.InvoiceGenDate)=CURDATE()");
-$rws=mysqli_fetch_array($quryss);
+$quryss=pg_query("select sum(tblorders.Quantity*tblproducts.ProductPrice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.ProductId where date(tblorders.InvoiceGenDate)=CURDATE()");
+$rws=pg_fetch_array($quryss);
 ?>
 <div class="col-lg-3 col-md-6">
 <div class="card card-sm">
@@ -193,72 +192,20 @@ $rws=mysqli_fetch_array($quryss);
 <small class="d-block">Today's Total Sales</small>
 </div>
 </div>
-
 </div>
 </div>
 
 
 </div>
 
-<!-- <div class="row">                
-
-<script type="text/javascript">
-      google.charts.load('current', {'packages':['bar']});
-      google.charts.setOnLoadCallback(drawChart);
-
-      function drawChart() {
-        var data = google.visualization.arrayToDataTable([
-          ['Data', 'Count'],
-
-            <?php 
-
-            $totalsaltdate = number_format($row['tt'],2); 
-            $lastsevdaysals = number_format($row['tt'],2);
-            $yestdsals = number_format($rw['tt'],2);
-            $todayssale = number_format($rws['tt'],2);
-
-                $element_text=['Listed Category','Listed Componey','listed Products','Total sales till date','Last 7 Days Sales','Yesterday Total Sales','Todays Sales'];
-                $element_count=[$listedcat,$listedcomp,$listedproduct,$totalsaltdate,$lastsevdaysals,$yestdsals,$todayssale];
-
-                for($i=0;$i<7;$i++)
-                {
-                    echo "['{$element_text[$i]}'" . "," . "{$element_count[$i]}],";
-                }
-             ?>
-
-          //['Posts', 1000],
-        ]);
-
-        var options = {
-          chart: {
-            title: '',
-            subtitle: '',
-          }
-        };
-
-        var chart = new google.charts.Bar(document.getElementById('columnchart_material'));
-
-        chart.draw(data, google.charts.Bar.convertOptions(options));
-      }
-    </script>
-
-    <div id="columnchart_material" style="width: 'auto'; height: 500px;"></div>
-
-</div> -->
-
-  
-					
             </div>
-            
             <!-- /Container -->
-            			
+
             <!-- Footer -->
 <?php include_once('includes/footer.php');?>
             <!-- /Footer -->
         </div>
         <!-- /Main Content -->
-
-
 
     </div>
     <!-- /HK Wrapper -->
@@ -283,9 +230,7 @@ $rws=mysqli_fetch_array($quryss);
     <script src="vendors/apexcharts/dist/apexcharts.min.js"></script>
 	<script src="dist/js/irregular-data-series.js"></script>
     <script src="dist/js/init.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-    
 </body>
 
 </html>

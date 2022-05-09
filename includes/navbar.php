@@ -13,12 +13,12 @@
                                 </div>
                                 <span class="badge badge-success badge-indicator"></span>
                             </div>
-<?php 
+<?php
 //Getting admin name
 $adminid=$_SESSION['aid'];
-$query=mysqli_query($con,"select AdminName from tbladmin where id='$adminid'");
-$row=mysqli_fetch_array($query);
-?>                            
+$query=pg_query("select AdminName from tbladmin where id='$adminid'");
+$row=pg_fetch_array($query);
+?>
                             <div class="media-body">
                                 <span><?php echo $row['AdminName'];?><i class="zmdi zmdi-chevron-down"></i></span>
                             </div>
@@ -30,7 +30,7 @@ $row=mysqli_fetch_array($query);
                         <div class="dropdown-divider"></div>
                         <div class="sub-dropdown-menu show-on-hover">
                             <a href="#" class="dropdown-toggle dropdown-item no-caret"><i class="zmdi zmdi-check text-success"></i>Online</a>
-                      
+
                         </div>
                         <div class="dropdown-divider"></div>
                         <a class="dropdown-item" href="logout.php"><i class="dropdown-icon zmdi zmdi-power"></i><span>Log out</span></a>

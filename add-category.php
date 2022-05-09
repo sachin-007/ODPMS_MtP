@@ -9,15 +9,19 @@ if (strlen($_SESSION['aid']==0)) {
 if(isset($_POST['submit']))
 {
 //Getting Post Values
-$catname=$_POST['category']; 
-$catcode=$_POST['categorycode'];   
-$query=mysqli_query($con,"insert into tblcategory(CategoryName,CategoryCode) values('$catname','$catcode')"); 
+$catname=$_POST['category'];
+$catcode=$_POST['categorycode'];
+// $query=pg_query("insert into tblcategory(categoryname,categorycode) values('$catname','$catcode')");
+$query=pg_query("INSERT INTO tblcategory(CategoryName,CategoryCode) VALUES('$catname','$catcode')"); 
+
+
+
 if($query){
-echo "<script>alert('Category added successfully.');</script>";   
+echo "<script>alert('Category added successfully.');</script>";
 echo "<script>window.location.href='add-category.php'</script>";
 } else{
-echo "<script>alert('Something went wrong. Please try again.');</script>";   
-echo "<script>window.location.href='add-category.php'</script>";    
+echo "<script>alert('Something went wrong. Please try again.');</script>";
+echo "<script>window.location.href='add-category.php'</script>";
 }
 }
 
@@ -35,8 +39,8 @@ echo "<script>window.location.href='add-category.php'</script>";
 </head>
 
 <body>
-    
-    
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 
@@ -44,7 +48,7 @@ echo "<script>window.location.href='add-category.php'</script>";
 <?php include_once('includes/navbar.php');
 include_once('includes/sidebar.php');
 ?>
-       
+
 
 
         <div id="hk_nav_backdrop" class="hk-nav-backdrop"></div>
@@ -79,7 +83,7 @@ include_once('includes/sidebar.php');
 <div class="row">
 <div class="col-sm">
 <form class="needs-validation" method="post" novalidate>
-                                       
+
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Category</label>
@@ -95,13 +99,13 @@ include_once('includes/sidebar.php');
 <div class="invalid-feedback">Please provide a valid category code.</div>
 </div>
 </div>
-                                 
+
 <button class="btn btn-primary" type="submit" name="submit">Submit</button>
 </form>
 </div>
 </div>
 </section>
-                     
+
 </div>
 </div>
 </div>

@@ -8,16 +8,16 @@ if (strlen($_SESSION['aid']==0)) {
 // Add company Code
 if(isset($_POST['update']))
 {
- $adminid=$_SESSION['aid'];   
+ $adminid=$_SESSION['aid'];
 //Getting Post Values
-$adminname=$_POST['adminname'];  
-$emailid=$_POST['emailid'];  
-$mobileno=$_POST['mobilenumber'];   
-$query=mysqli_query($con,"update tbladmin set AdminName='$adminname',MobileNumber='$mobileno',Email='$emailid' where id='$adminid'"); 
+$adminname=$_POST['adminname'];
+$emailid=$_POST['emailid'];
+$mobileno=$_POST['mobilenumber'];
+$query=pg_query("update tbladmin set AdminName='$adminname',MobileNumber='$mobileno',Email='$emailid' where id='$adminid'");
 if($query){
-echo "<script>alert('Admin details updated successfully.');</script>";   
+echo "<script>alert('Admin details updated successfully.');</script>";
 echo "<script>window.location.href='profile.php'</script>";
-} 
+}
 }
 
     ?>
@@ -34,8 +34,8 @@ echo "<script>window.location.href='profile.php'</script>";
 </head>
 
 <body>
-    
-    
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 
@@ -43,7 +43,7 @@ echo "<script>window.location.href='profile.php'</script>";
 <?php include_once('includes/navbar.php');
 include_once('includes/sidebar.php');
 ?>
-       
+
 
 
         <div id="hk_nav_backdrop" class="hk-nav-backdrop"></div>
@@ -78,31 +78,31 @@ include_once('includes/sidebar.php');
 <div class="row">
 <div class="col-sm">
 <form class="needs-validation" method="post" novalidate>
-<?php 
+<?php
 //Getting admin name
 $adminid=$_SESSION['aid'];
-$query=mysqli_query($con,"select * from tbladmin where id='$adminid'");
-while($row=mysqli_fetch_array($query)){
-?>   
+$query=pg_query("select * from tbladmin where id='$adminid'");
+while($row=pg_fetch_array($query)){
+?>
 
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03"> Reg. Date</label>
-<?php echo $row['AdminRegdate'];?>
+<?php echo $row['adminregdate'];?>
 </div>
 </div>
-<?php if($row['UpdationDate']!=""){?>
+<?php if($row['updationdate']!=""){?>
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03"> Last Updation Date</label>
-<?php echo $row['UpdationDate'];?>
+<?php echo $row['updationdate'];?>
 </div>
 </div>
 <?php } ?>
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03"> Name</label>
-<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['AdminName'];?>" name="adminname" required>
+<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['adminname'];?>" name="adminname" required>
 <div class="invalid-feedback">Please provide a valid  name.</div>
 </div>
 </div>
@@ -110,14 +110,14 @@ while($row=mysqli_fetch_array($query)){
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03"> Username</label>
-<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['UserName'];?>" name="username" readonly>
+<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['username'];?>" name="username" readonly>
 </div>
 </div>
 
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Email id</label>
-<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['Email'];?>" name="emailid" required>
+<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['email'];?>" name="emailid" required>
 <div class="invalid-feedback">Please provide a valid  Email id.</div>
 </div>
 </div>
@@ -125,7 +125,7 @@ while($row=mysqli_fetch_array($query)){
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03"> Mobile Number</label>
-<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['MobileNumber'];?>" name="mobilenumber" required>
+<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['mobilenumber'];?>" name="mobilenumber" required>
 <div class="invalid-feedback">Please provide a valid  mobile number.</div>
 </div>
 </div>
@@ -133,13 +133,13 @@ while($row=mysqli_fetch_array($query)){
 
 
 <?php } ?>
-                                 
+
 <button class="btn btn-primary" type="submit" name="update">Update</button>
 </form>
 </div>
 </div>
 </section>
-                     
+
 </div>
 </div>
 </div>

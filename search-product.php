@@ -13,9 +13,9 @@ switch($_GET["action"]) {
     case "add":
         if(!empty($_POST["quantity"])) {
             $pid=$_GET["pid"];
-            $result=mysqli_query($con,"SELECT * FROM tblproducts WHERE id='$pid'");
-              while($productByCode=mysqli_fetch_array($result)){
-            $itemArray = array($productByCode["id"]=>array('catname'=>$productByCode["CategoryName"], 'compname'=>$productByCode["CompanyName"], 'quantity'=>$_POST["quantity"], 'pname'=>$productByCode["ProductName"], 'price'=>$productByCode["ProductPrice"],'code'=>$productByCode["id"]));
+            $result=pg_query("SELECT * FROM tblproducts WHERE id='$pid'");
+              while($productByCode=pg_fetch_array($result)){
+            $itemArray = array($productByCode["id"]=>array('catname'=>$productByCode["categoryname"], 'compname'=>$productByCode["companyname"], 'quantity'=>$_POST["quantity"], 'pname'=>$productByCode["productname"], 'price'=>$productByCode["productprice"],'code'=>$productByCode["id"]));
             if(!empty($_SESSION["cart_item"])) {
                 if(in_array($productByCode["id"],array_keys($_SESSION["cart_item"]))) {
                     foreach($_SESSION["cart_item"] as $k => $v) {
@@ -41,7 +41,7 @@ switch($_GET["action"]) {
         if(!empty($_SESSION["cart_item"])) {
             foreach($_SESSION["cart_item"] as $k => $v) {
                     if($_GET["code"] == $k)
-                        unset($_SESSION["cart_item"][$k]);              
+                        unset($_SESSION["cart_item"][$k]);
                     if(empty($_SESSION["cart_item"]))
                         unset($_SESSION["cart_item"]);
             }
@@ -50,7 +50,7 @@ switch($_GET["action"]) {
     // code for if cart is empty
     case "empty":
         unset($_SESSION["cart_item"]);
-    break;  
+    break;
 }
 }
 
@@ -64,9 +64,9 @@ $cmobileno=$_POST['mobileno'];
 $pmode=$_POST['paymentmode'];
 $value=array_combine($pid,$quantity);
 foreach($value as $pdid=> $qty){
-$query=mysqli_query($con,"insert into tblorders(ProductId,Quantity,InvoiceNumber,CustomerName,CustomerContactNo,PaymentMode) values('$pdid','$qty','$invoiceno','$cname','$cmobileno','$pmode')") ; 
+$query=pg_query("insert into tblorders(productid,quantity,invoicenumber,customername,customercontactno,paymentmode) values('$pdid','$qty','$invoiceno','$cname','$cmobileno','$pmode')") ;
 }
-echo '<script>alert("Invoice genrated successfully. Invoice number is "+"'.$invoiceno.'")</script>';  
+echo '<script>alert("Invoice genrated successfully. Invoice number is "+"'.$invoiceno.'")</script>';
  unset($_SESSION["cart_item"]);
  $_SESSION['invoice']=$invoiceno;
  echo "<script>window.location.href='invoice.php'</script>";
@@ -87,8 +87,8 @@ echo '<script>alert("Invoice genrated successfully. Invoice number is "+"'.$invo
 </head>
 
 <body>
-    
-    
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 
@@ -96,7 +96,7 @@ echo '<script>alert("Invoice genrated successfully. Invoice number is "+"'.$invo
 <?php include_once('includes/navbar.php');
 include_once('includes/sidebar.php');
 ?>
-       
+
 
 
         <div id="hk_nav_backdrop" class="hk-nav-backdrop"></div>
@@ -132,7 +132,7 @@ include_once('includes/sidebar.php');
 <div class="row">
 <div class="col-sm">
 <form class="needs-validation" method="post" novalidate>
-                                       
+
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Product Name</label>
@@ -141,7 +141,7 @@ include_once('includes/sidebar.php');
 </div>
 </div>
 
-                                 
+
 <button class="btn btn-primary" type="submit" name="search">search</button>
 </form>
 </div>
@@ -150,7 +150,7 @@ include_once('includes/sidebar.php');
 <!--code for search result -->
 <?php if(isset($_POST['search'])){?>
  <section class="hk-sec-wrapper">
-     
+
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="table-wrap">
@@ -164,48 +164,48 @@ include_once('includes/sidebar.php');
                                                     <th>Pricing</th>
                                                     <th>Quantity</th>
                                                     <th>Action</th>
-                                                    
+
                                                 </tr>
                                             </thead>
                                             <tbody>
 <?php
 $pname=$_POST['productname'];
-$query=mysqli_query($con,"select * from tblproducts where ProductName like '%$pname%'");
+$query=pg_query("select * from tblproducts where productname like '%$pname%'");
 $cnt=1;
-while($row=mysqli_fetch_array($query))
-{    
+while($row=pg_fetch_array($query))
+{
 ?>
-<form method="post" action="search-product.php?action=add&pid=<?php echo $row["id"]; ?>">                                                  
+<form method="post" action="search-product.php?action=add&pid=<?php echo $row["id"]; ?>">
 <tr>
 <td><?php echo $cnt;?></td>
-<td><?php echo $row['CategoryName'];?></td>
-<td><?php echo $row['CompanyName'];?></td>
-<td><?php echo $row['ProductName'];?></td>
-<td><?php echo $row['ProductPrice'];?></td>
+<td><?php echo $row['categoryname'];?></td>
+<td><?php echo $row['companyname'];?></td>
+<td><?php echo $row['productname'];?></td>
+<td><?php echo $row['productprice'];?></td>
 <td><input type="text" class="product-quantity" name="quantity" value="1" size="2" /></td>
 <td>
 <input type="submit" value="Add to Cart" class="btnAddAction" />
 </td>
 </tr>
 </form>
-<?php 
+<?php
 $cnt++;
 } ?>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                             </div>
 </section>
-<?php } ?>                        
+<?php } ?>
 
 
 <form class="needs-validation" method="post" novalidate>
 
 <!--- Shopping Cart ---->
 <section class="hk-sec-wrapper">
-     
+
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="table-wrap">
@@ -217,7 +217,7 @@ $cnt++;
 if(isset($_SESSION["cart_item"])){
     $total_quantity = 0;
     $total_price = 0;
-?>  
+?>
   <table id="datable_1" class="table table-hover w-100 display pb-30" border="1">
 <tbody>
 <tr>
@@ -228,9 +228,9 @@ if(isset($_SESSION["cart_item"])){
 <th width="10%">Unit Price</th>
 <th width="10%">Price</th>
 <th width="5%">Remove</th>
-</tr>   
-<?php 
- $productid=array();      
+</tr>
+<?php
+ $productid=array();
     foreach ($_SESSION["cart_item"] as $item){
         $item_price = $item["quantity"]*$item["price"];
         array_push($productid,$item['code']);
@@ -260,7 +260,7 @@ if(isset($_SESSION["cart_item"])){
 <td></td>
 </tr>
 </tbody>
-</table>  
+</table>
 
 <div class="form-row">
 <div class="col-md-6 mb-10">
@@ -297,7 +297,7 @@ if(isset($_SESSION["cart_item"])){
 } else {
 ?>
 <div style="color:red" align="center">Your Cart is Empty</div>
-<?php 
+<?php
 }
 ?>
 </div>
@@ -305,7 +305,7 @@ if(isset($_SESSION["cart_item"])){
 
 
 
-    
+
 
 
 

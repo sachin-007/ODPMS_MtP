@@ -5,11 +5,11 @@ include('includes/config.php');
 if (strlen($_SESSION['aid']==0)) {
   header('location:logout.php');
   } else{
-// Code for deletion   
-if(isset($_GET['del'])){    
+// Code for deletion
+if(isset($_GET['del'])){
 $cmpid=substr(base64_decode($_GET['del']),0,-5);
-$query=mysqli_query($con,"delete from tblcategory where id='$cmpid'");
-echo "<script>alert('Category record deleted.');</script>";   
+$query=pg_query("delete from tblcategory where id='$cmpid'");
+echo "<script>alert('Category record deleted.');</script>";
 echo "<script>window.location.href='manage-categories.php'</script>";
 }
 ?>
@@ -27,8 +27,8 @@ echo "<script>window.location.href='manage-categories.php'</script>";
     <link href="dist/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    
-   
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 <!-- Top Navbar -->
@@ -77,27 +77,34 @@ $tdate=$_POST['todate'];
                                                     <th>#</th>
                                                     <th>Month / Year</th>
                                                     <th>Sale Amount</th>
-                                                    
+
+
                                                 </tr>
                                             </thead>
                                             <tbody>
-<?php 
-$rno=mt_rand(10000,99999); 
-$query=mysqli_query($con,"select month(tblorders.InvoiceGenDate) as mnth,year(tblorders.InvoiceGenDate) as yearr,sum(tblorders.Quantity*tblproducts.ProductPrice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.ProductId  where date(tblorders.InvoiceGenDate) between '$fdate' and '$tdate' group by mnth,yearr");
+<?php
+$rno=mt_rand(10000,99999);
+$stime=pg_query("select invoicegendate from tblorders");
+// $mnth=pg_query("select EXTRACT(month from timestamp '$stime')");
+// $yearr=pg_query("select EXTRACT(year from timestamp '$stime')");
+// $etime=pg_query("select invoicegendate from tblorders");
+// $query=pg_query("select month(tblorders.invoicegendate) as mnth,year(tblorders.invoicegendate) as yearr,sum(tblorders.quantity*tblproducts.productprice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.productid  where date(tblorders.invoicegendate) between '$fdate' and '$tdate' group by mnth,yearr");
+$query=pg_query("select EXTRACT(month from timestamp '$stime') as mnth ,EXTRACT(year from timestamp '$stime') as yearr,sum(tblorders.quantity*tblproducts.productprice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.productid  where date(tblorders.invoicegendate) between '$fdate' and '$tdate' group by mnth,yearr");
+// $query=pg_query("select EXTRACT(month from timestamp '$stime') as mnth,EXTRACT(year from '$stime') as yearr,sum(tblorders.quantity*tblproducts.productprice) as tt  from tblorders join tblproducts on tblproducts.id=tblorders.productid  where date(tblorders.invoicegendate) between '$fdate' and '$tdate' group by mnth,yearr");
 $cnt=1;
-while($row=mysqli_fetch_array($query))
-{    
-?>                                                
+while($row=pg_fetch_array($query))
+{
+?>
 <tr>
 <td><?php echo $cnt;?></td>
 <td><?php echo $row['mnth']."/".$row['yearr'];?></td>
 <td><?php echo $row['tt'];?></td>
 
 </tr>
-<?php 
+<?php
 $cnt++;
 } ?>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>

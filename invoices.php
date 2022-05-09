@@ -5,11 +5,11 @@ include('includes/config.php');
 if (strlen($_SESSION['aid']==0)) {
   header('location:logout.php');
   } else{
-// Code for deletion   
-if(isset($_GET['del'])){    
+// Code for deletion
+if(isset($_GET['del'])){
 $cmpid=substr(base64_decode($_GET['del']),0,-5);
-$query=mysqli_query($con,"delete from tblcategory where id='$cmpid'");
-echo "<script>alert('Category record deleted.');</script>";   
+$query=pg_query("delete from tblcategory where id='$cmpid'");
+echo "<script>alert('Category record deleted.');</script>";
 echo "<script>window.location.href='manage-categories.php'</script>";
 }
 ?>
@@ -27,8 +27,8 @@ echo "<script>window.location.href='manage-categories.php'</script>";
     <link href="dist/css/style.css" rel="stylesheet" type="text/css">
 </head>
 <body>
-    
-   
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 <!-- Top Navbar -->
@@ -75,32 +75,32 @@ include_once('includes/sidebar.php');
                                                     <th>Payment Mode</th>
                                                     <th>Invoice Gen. Date</th>
                                                     <th>Action</th>
-                                                    
+
                                                 </tr>
                                             </thead>
                                             <tbody>
-<?php 
-$rno=mt_rand(10000,99999); 
-$query=mysqli_query($con,"select distinct InvoiceNumber,CustomerName,CustomerContactNo,PaymentMode,InvoiceGenDate  from tblorders");
+<?php
+$rno=mt_rand(10000,99999);
+$query=pg_query("select distinct invoicenumber,customername,customercontactno,paymentmode,invoicegendate from tblorders");
 $cnt=1;
-while($row=mysqli_fetch_array($query))
-{    
-?>                                                
+while($row=pg_fetch_array($query))
+{
+?>
 <tr>
 <td><?php echo $cnt;?></td>
-<td><?php echo $row['InvoiceNumber'];?></td>
-<td><?php echo $row['CustomerName'];?></td>
-<td><?php echo $row['CustomerContactNo'];?></td>
-<td><?php echo $row['PaymentMode'];?></td>
-<td><?php echo $row['InvoiceGenDate'];?></td>
+<td><?php echo $row['invoicenumber'];?></td>
+<td><?php echo $row['customername'];?></td>
+<td><?php echo $row['customercontactno'];?></td>
+<td><?php echo $row['paymentmode'];?></td>
+<td><?php echo $row['invoicegendate'];?></td>
 <td>
-<a href="view-invoice.php?invid=<?php echo base64_encode($row['InvoiceNumber'].$rno);?>" class="mr-25" data-toggle="tooltip" data-original-title="View Details"> <i class="glyphicon glyphicon-envelope"></i></a>
+<a href="view-invoice.php?invid=<?php echo base64_encode($row['invoicenumber'].$rno);?>" class="mr-25" data-toggle="tooltip" data-original-title="View Details"> <i class="glyphicon glyphicon-envelope"></i></a>
 </td>
 </tr>
-<?php 
+<?php
 $cnt++;
 } ?>
-                                                
+
                                             </tbody>
                                         </table>
                                     </div>

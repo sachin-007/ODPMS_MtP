@@ -10,9 +10,9 @@ if(isset($_POST['update']))
 {
 $cmpid=substr(base64_decode($_GET['compid']),0,-5);
 //Getting Post Values
-$cname=$_POST['companyname'];   
-$query=mysqli_query($con,"update  tblcompany set  CompanyName='$cname' where id='$cmpid'"); 
-echo "<script>alert('Company update successfully.');</script>";   
+$cname=$_POST['companyname'];
+$query=pg_query("update  tblcompany set  CompanyName='$cname' where id='$cmpid'");
+echo "<script>alert('Company update successfully.');</script>";
 echo "<script>window.location.href='manage-companies.php'</script>";
 }
 
@@ -30,8 +30,8 @@ echo "<script>window.location.href='manage-companies.php'</script>";
 </head>
 
 <body>
-    
-    
+
+
 	<!-- HK Wrapper -->
 	<div class="hk-wrapper hk-vertical-nav">
 
@@ -39,7 +39,7 @@ echo "<script>window.location.href='manage-companies.php'</script>";
 <?php include_once('includes/navbar.php');
 include_once('includes/sidebar.php');
 ?>
-       
+
 
 
         <div id="hk_nav_backdrop" class="hk-nav-backdrop"></div>
@@ -76,26 +76,26 @@ include_once('includes/sidebar.php');
 <form class="needs-validation" method="post" novalidate>
  <?php
 $cmpid=substr(base64_decode($_GET['compid']),0,-5);
-$query=mysqli_query($con,"select * from tblcompany where id='$cmpid' ");
+$query=pg_query("select * from tblcompany where id='$cmpid' ");
 $cnt=1;
-while($row=mysqli_fetch_array($query))
-{    
-?>                                       
+while($row=pg_fetch_array($query))
+{
+?>
 <div class="form-row">
 <div class="col-md-6 mb-10">
 <label for="validationCustom03">Company Name</label>
-<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['CompanyName'];?>" name="companyname" required>
+<input type="text" class="form-control" id="validationCustom03" value="<?php echo $row['companyname'];?>" name="companyname" required>
 <div class="invalid-feedback">Please provide a valid Company name.</div>
 </div>
 </div>
 <?php } ?>
-                                 
+
 <button class="btn btn-primary" type="submit" name="update">Update</button>
 </form>
 </div>
 </div>
 </section>
-                     
+
 </div>
 </div>
 </div>

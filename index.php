@@ -6,17 +6,38 @@ if(isset($_POST['login']))
   {
     $adminuser=$_POST['username'];
     $password=md5($_POST['password']);
-    $query=mysqli_query($con,"select ID from tbladmin where  UserName='$adminuser' && Password='$password' ");
-    $ret=mysqli_fetch_array($query);
+    // $query=pg_query($con,"SELECT ID FROM tbladmin WHERE (UserName = 'admin' AND Password = 'f925916e2754e5e03f75dd58a5733251')");
+    // $query=pg_query("SELECT ID FROM tbladmin WHERE (UserName = 'admin' AND Password = 'f925916e2754e5e03f75dd58a5733251')");
+    $query="SELECT ID FROM tbladmin WHERE (UserName = 'admin' AND Password = 'f925916e2754e5e03f75dd58a5733251')";
+    // $sql=<<<EOF
+    //     SELECT ID FROM tbladmin WHERE (UserName = 'admin' AND Password = 'f925916e2754e5e03f75dd58a5733251');
+    //   EOF;
+    //
+    //   $query=pg_query($con,$sql);
+
+    $result = pg_query($query);
+
+    // echo md5("sachin");
+
+    // while($ret=pg_fetch_array($result,NULL,PQSQL_ASSOC)){
+    $ret=pg_fetch_array($result);
     if($ret>0){
-      $_SESSION['aid']=$ret['ID'];
+      // $_SESSION['aid']=$ret['ID'];
+      // $_SESSION['aid']=$ret[ID];
+      $_SESSION['aid']=$ret[0];
+
      header('location:add-category.php');
+     echo "<h2>".$_SESSION['aid']."</h2>";
     }
     else{
-     echo "<script>alert('Invalid details. Please try again.');</script>";   
+      header('location:dashboard.php');
+      echo "<h2> no thing is here</h2>";
+
+     echo "<script>alert('Invalid details. Please try again.');</script>";
    echo "<script>window.location.href='dashboard.php'</script>";
     }
-  }
+  // }
+}
   ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -35,8 +56,8 @@ if(isset($_POST['login']))
 </head>
 
 <body>
-    
-   
+
+
     <!-- HK Wrapper -->
     <div class="hk-wrapper">
 
@@ -46,7 +67,7 @@ if(isset($_POST['login']))
 <a class="d-flex auth-brand align-items-center" href="#">
 <span class="text-white font-30">Dairy Farm Shop Management System</span>
                 </a>
-               
+
             </header>
             <div class="container-fluid">
                 <div class="row">
@@ -55,7 +76,7 @@ if(isset($_POST['login']))
                             <div class="fadeOut item auth-cover-img overlay-wrap" style="background-image:url(dist/img/banner2.png);">
                                 <div class="auth-cover-info py-xl-0 pt-100 pb-50">
                                     <div class="auth-cover-content text-center w-xxl-75 w-sm-90 w-xs-100">
-                                       
+
                                     </div>
                                 </div>
                                 <div class="bg-overlay bg-trans-dark-50"></div>
@@ -63,7 +84,7 @@ if(isset($_POST['login']))
                             <div class="fadeOut item auth-cover-img overlay-wrap" style="background-image:url(dist/img/banner1.png);">
                                 <div class="auth-cover-info py-xl-0 pt-100 pb-50">
                                     <div class="auth-cover-content text-center w-xxl-75 w-sm-90 w-xs-100">
-                                      
+
                                     </div>
                                 </div>
                                 <div class="bg-overlay bg-trans-dark-50"></div>
@@ -75,7 +96,7 @@ if(isset($_POST['login']))
      <div class="auth-form w-xxl-55 w-xl-75 w-sm-90 w-xs-100">
                                 <form method="post">
                                     <h1 class="display-4 mb-10">Welcome Back :)</h1>
-                                 
+
 <div class="form-group">
 <input class="form-control" placeholder="Username" type="text" name="username" required="true">
 </div>
@@ -88,10 +109,10 @@ if(isset($_POST['login']))
 </div>
 </div>
 </div>
-                              
+
 <button class="btn btn-warning btn-block" type="submit" name="login">Login</button>
 <p class="font-14 text-center mt-15">Having trouble logging in?</p>
-     
+
                                 </form>
                             </div>
                         </div>
@@ -126,9 +147,6 @@ if(isset($_POST['login']))
     <!-- Init JavaScript -->
     <script src="dist/js/init.js"></script>
     <script src="dist/js/login-data.js"></script>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-
-
 </body>
 
 </html>
