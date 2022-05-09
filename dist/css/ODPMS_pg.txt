@@ -1,0 +1,70 @@
+postgres=# CREATE DATABASE odpms;
+CREATE DATABASE
+postgres=# \c odpms;
+psql (14.2 (Ubuntu 14.2-1.pgdg18.04+1), server 10.19 (Ubuntu 10.19-0ubuntu0.18.04.1))
+You are now connected to database "odpms" as user "postgres".
+odpms=# CREATE TABLE tbladmin (
+odpms(#   ID SERIAL PRIMARY KEY,
+odpms(#   AdminName varchar(45) DEFAULT NULL,
+odpms(#   UserName char(45) DEFAULT NULL,
+odpms(#   MobileNumber bigint DEFAULT 1 NOT NULL,
+odpms(#   Email varchar(120) DEFAULT NULL,
+odpms(#   Password varchar(120) DEFAULT NULL,
+odpms(#   AdminRegdate timestamp NULL DEFAULT current_timestamp,
+odpms(#   UpdationDate timestamp NULL DEFAULT now()::timestamp
+odpms(# );
+CREATE TABLE
+odpms=# INSERT INTO tbladmin (ID, AdminName, UserName, MobileNumber, Email, Password, AdminRegdate, UpdationDate) VALUES
+odpms-# (1, 'Admin', 'admin', 1234567899, 'admin@test.com','f925916e2754e5e03f75dd58a5733251', '2019-12-22 18:30:00', '2019-12-25 14:56:18');
+INSERT 0 1
+odpms=# 
+odpms=# INSERT INTO tbladmin (ID, AdminName, UserName, MobileNumber, Email, Password, AdminRegdate, UpdationDate) VALUES
+odpms-# (2, 'Admin', 'sachin', 1234567899, 'admin@test.com','15285722f9def45c091725aee9c387', '2021-12-22 18:30:00', '2021-12-25 14:56:18');
+INSERT 0 1
+odpms=# CREATE TABLE tblcategory (
+odpms(#   id SERIAL PRIMARY KEY,
+odpms(#   CategoryName varchar(200) DEFAULT NULL,
+odpms(#   CategoryCode varchar(50) DEFAULT NULL,
+odpms(#   PostingDate timestamp NULL DEFAULT current_timestamp
+odpms(# );
+CREATE TABLE
+odpms=# CREATE TABLE tblcompany(
+odpms(#   id SERIAL PRIMARY KEY,
+odpms(#   CompanyName varchar(150) DEFAULT NULL,
+odpms(#   PostingDate timestamp NULL DEFAULT current_timestamp
+odpms(# );
+CREATE TABLE
+odpms=# CREATE TABLE tblorders (
+odpms(#   id SERIAL PRIMARY KEY,
+odpms(#   ProductId bigint DEFAULT 1 NOT NULL,
+odpms(#   Quantity bigint DEFAULT 1 NOT NULL,
+odpms(#   InvoiceNumber bigint DEFAULT 1 NOT NULL,
+odpms(#   CustomerName varchar(150) DEFAULT NULL,
+odpms(#   CustomerContactNo bigint DEFAULT 1 NULL,
+odpms(#   PaymentMode varchar(100) DEFAULT NULL,
+odpms(#   InvoiceGenDate timestamp NULL DEFAULT current_timestamp
+odpms(# );
+CREATE TABLE
+odpms=# CREATE TABLE tblproducts(
+odpms(#   id SERIAL PRIMARY KEY,
+odpms(#   CategoryName varchar(150) DEFAULT NULL,
+odpms(#   CompanyName varchar(150) DEFAULT NULL,
+odpms(#   ProductName varchar(150) DEFAULT NULL,
+odpms(#   ProductPrice decimal(10,0) DEFAULT NULL ,
+odpms(#   PostingDate timestamp NOT NULL DEFAULT current_timestamp,
+odpms(#   UpdationDate timestamp DEFAULT 'now'::timestamp
+odpms(# );
+CREATE TABLE
+odpms=# CREATE FUNCTION update_updated_at_column() RETURNS trigger
+odpms-# LANGUAGE plpgsql
+odpms-# AS $$
+odpms$# BEGIN
+odpms$# NEW.UpdationDate=NOW();
+odpms$# RETURN NEW;
+odpms$# END;
+odpms$# $$;
+CREATE FUNCTION
+odpms=# CREATE TRIGGER t1_updated_at_modtime BEFORE UPDATE ON tblproducts FOR EACH ROW EXECUTE PROCEDURE update_updated_at_column();
+CREATE TRIGGER
+odpms=# 
+
